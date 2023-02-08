@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: authorization
+    ports:
+      - "5432:5432"
+    networks:
+      - authorization-network
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_URL: ${POSTGRES_URL}
+    depends_on:
+      - db
+    networks:
+      - authorization-network
+  migrate:
+    build: .
+    command: sh -c "npx prisma generate dev"
+    depends_on:
+      - db
+    networks:
+      - authorization-network
+networks:
+  authorization-network:
+    external: true
+
