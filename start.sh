@@ -61,4 +61,8 @@ echo "running authorization-app"
 docker run -e POSTGRES_URL=$POSTGRES_URL \
 -e ADMINISTRATOR_ROLE_ID=$ADMINISTRATOR_ROLE_ID \
 --name authorization-app \
--p 3000:3000 authorization-app
+-e PORT=$PORT \
+-p $PORT:$PORT authorization-app
+
+
+open http://localhost:$PORT/api

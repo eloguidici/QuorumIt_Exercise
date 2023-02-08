@@ -25,20 +25,15 @@ async function bootstrap() {
     .addTag('Users Management')
     .addBearerAuth(
       {
-        // I was also testing it without prefix 'Bearer ' before the JWT
         description: `[just text field] Please enter token in following format: Bearer <JWT>`,
         name: 'Authorization',
-        bearerFormat: 'Bearer', // I`ve tested not to use this field, but the result was the same
+        bearerFormat: 'Bearer',
         scheme: 'Bearer',
-        type: 'http', // I`ve attempted type: 'apiKey' too
+        type: 'http',
         in: 'Header',
       },
-      'access-token', // This name here is important for matching up with @ApiBearerAuth() in your controller!
+      'access-token',
     )
-    /*     .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'header' },
-      'authorization',
-    ) */
     .build();
 
   const options: SwaggerDocumentOptions = {
@@ -49,6 +44,6 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
