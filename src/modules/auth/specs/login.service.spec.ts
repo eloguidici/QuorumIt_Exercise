@@ -51,7 +51,9 @@ describe('LoginService', () => {
         userRoles: [],
       };
 
-      jest.spyOn(usersService, 'validate').mockResolvedValueOnce(user);
+      jest
+        .spyOn(usersService, 'validateEmailAndPassword')
+        .mockResolvedValueOnce(user);
       const result = await loginService.login(loginDto);
       expect(result).not.toBeUndefined();
       expect(result).not.toBeNull();

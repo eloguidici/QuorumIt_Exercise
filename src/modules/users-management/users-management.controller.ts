@@ -17,7 +17,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { LoggerService } from '../commons/logger-service';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AssignRoleToUserDto } from './dtos/assign-role-to-user.dto';
 import { UsersManagementService } from './users-management.service';
 import { UserRoleResponse } from './dtos/user-role-response.dto';
@@ -53,6 +53,7 @@ export class UsersManagementController {
   @HttpCode(201)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   async assignRoleToUser(
     @Body() assignRoleToUserDto: AssignRoleToUserDto,
   ): Promise<UserRoleResponse> {
@@ -77,6 +78,7 @@ export class UsersManagementController {
   @HttpCode(201)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',
@@ -112,6 +114,7 @@ export class UsersManagementController {
   @HttpCode(201)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',
@@ -149,6 +152,7 @@ export class UsersManagementController {
   @HttpCode(201)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',

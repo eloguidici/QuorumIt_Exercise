@@ -25,7 +25,7 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UserResponse } from './dtos/user-response.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdministratorGuard } from '../auth/guards/administrator-guard';
 
 /**
@@ -53,6 +53,7 @@ export class UsersController {
   @HttpCode(201)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',
@@ -85,6 +86,7 @@ export class UsersController {
   @HttpCode(200)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',
@@ -115,7 +117,14 @@ export class UsersController {
    */
   @Delete(':id')
   @HttpCode(200)
+  @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: 'number',
+  })
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 200,
     description: 'Successful response',
@@ -171,6 +180,16 @@ export class UsersController {
    * @returns Promise<UserResponse>
    */
   @Get(':id')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: 'number',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: 'number',
+  })
   @ApiResponse({
     status: 200,
     description: 'Successful response',

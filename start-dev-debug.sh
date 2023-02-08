@@ -54,3 +54,6 @@ npx prisma db seed
 #database: authorization
 #user: postgres
 #password: admin
+
+#docker inspect --format='{{.NetworkSettings.Networks}}' postgres
+#docker inspect --format='{{.NetworkSettings.Networks}}' authorization-app

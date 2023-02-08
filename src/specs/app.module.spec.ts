@@ -1,3 +1,10 @@
+/**
+ * @file Users Management Service
+ * @author Emiliano Loguidici
+ * @copyright Last modification date
+ */
+
+// Import necessary modules
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from '../app.module';
 

@@ -8,9 +8,18 @@ describe('UsersRepository', () => {
   let prisma: PrismaClient;
   let loggerService: LoggerService;
 
+  const TEST_EMAIL = 'test@example.com';
+
   beforeEach(() => {
     loggerService = new LoggerService();
-    prisma = new PrismaClient();
+    const prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.TEST_DATABASE_URL,
+        },
+      },
+    });
+
     repository = new UsersRepository(prisma, loggerService);
   });
 
@@ -22,7 +31,7 @@ describe('UsersRepository', () => {
     it('creates a new user', async () => {
       const data: User = {
         name: 'Test User',
-        email: 'test@example.com',
+        email: TEST_EMAIL,
         password: 'password',
         created_at: undefined,
         updated_at: undefined,
@@ -43,26 +52,16 @@ describe('UsersRepository', () => {
 
   describe('update', () => {
     it('updates an existing user', async () => {
+      const user = await repository.findByEmail(TEST_EMAIL);
+      user.name = 'Test User Changed';
 
-      //primero lo vamos a buscar
-
-      const data: User = {
-        name: 'Test User',
-        email: 'test@example.com',
-        password: 'password',
-        id: 2,
-        created_at: undefined,
-        updated_at: undefined,
-        userRoles: [],
-      };
-
-      const updatedUser = await repository.update(data);
+      const updatedUser = await repository.update(user);
 
       expect(updatedUser).toEqual(
         expect.objectContaining({
-          id: data.id,
-          name: data.name,
-          email: data.email,
+          id: user.id,
+          name: user.name,
+          email: user.email,
         }),
       );
     });
@@ -84,23 +83,27 @@ describe('UsersRepository', () => {
     });
   });
 
+  describe('findAll', () => {
+    it('returns an array of users', async () => {
+      const users = await repository.findAll();
+
+      expect(Array.isArray(users)).toBe(true);
+    });
+  });
+
   describe('delete', () => {
     it('deletes a user by ID', async () => {
-      await repository.delete(1);
+      const user = await repository.findByEmail(TEST_EMAIL);
+
+      await repository.delete(user.id);
+
+      const user2 = await repository.findByEmail(TEST_EMAIL);
     });
 
     it('throws an error if the user with the provided ID was not found', async () => {
       await expect(repository.delete(999)).rejects.toThrow(
         `User with ID 999 was not found`,
       );
-    });
-  });
-
-  describe('findAll', () => {
-    it('returns an array of users', async () => {
-      const users = await repository.findAll();
-
-      expect(Array.isArray(users)).toBe(true);
     });
   });
 });

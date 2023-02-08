@@ -20,7 +20,7 @@ import {
   ValidationPipe,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdministratorGuard } from '../auth/guards/administrator-guard';
 import { ForbiddenAssignRoleIdGuard } from '../auth/guards/forbidden-assign-role-id-guard';
 import { ForbiddenRoleIdGuard } from '../auth/guards/forbidden-role-id-guard';
@@ -59,6 +59,7 @@ export class RolesController {
   @HttpCode(201)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',
@@ -91,6 +92,7 @@ export class RolesController {
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
   @UseGuards(ForbiddenRoleIdGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 200,
     description: 'Successful response',
@@ -122,6 +124,12 @@ export class RolesController {
   @HttpCode(200)
   @UseGuards(AdministratorGuard)
   @UseGuards(ForbiddenRoleIdGuard)
+  @ApiBearerAuth('access-token')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: 'number',
+  })
   @ApiResponse({
     status: 200,
     description: 'Successful response',
@@ -177,6 +185,11 @@ export class RolesController {
    * @returns A promise that resolves to a RoleResponse object
    */
   @Get(':id')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: 'number',
+  })
   @ApiResponse({
     status: 200,
     description: 'Successful response',
@@ -210,6 +223,7 @@ export class RolesController {
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
   @UseGuards(ForbiddenAssignRoleIdGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',
@@ -247,6 +261,7 @@ export class RolesController {
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
   @UseGuards(ForbiddenUnssignRoleIdGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',

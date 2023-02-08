@@ -125,6 +125,12 @@ export class RolesRepository {
    */
   async assignPermissionToRole(data: RolePermission): Promise<RolePermission> {
     try {
+      const rolePermissionExists = await this.prisma.rolePermission.findFirst({
+        where: { permissionId: data.permissionId, roleId: data.roleId },
+      });
+      if (rolePermissionExists) {
+        return plainToInstance(RolePermission, rolePermissionExists);
+      }
       const rolePermission = await this.prisma.rolePermission.create({
         data: {
           roleId: data.roleId,

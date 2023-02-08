@@ -20,7 +20,7 @@ import {
   ValidationPipe,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AdministratorGuard } from '../auth/guards/administrator-guard';
 import { LoggerService } from '../commons/logger-service';
 import { CreatePermissionDto } from './dtos/create-permission.dto';
@@ -53,6 +53,7 @@ export class PermissionsController {
   @HttpCode(201)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 201,
     description: 'Successful response',
@@ -86,6 +87,7 @@ export class PermissionsController {
   @HttpCode(200)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 200,
     description: 'Successful response',
@@ -118,6 +120,12 @@ export class PermissionsController {
   @Delete(':id')
   @HttpCode(200)
   @UseGuards(AdministratorGuard)
+  @ApiBearerAuth('access-token')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: 'number',
+  })
   @ApiResponse({
     status: 200,
     description: 'Successful response',
@@ -175,6 +183,11 @@ export class PermissionsController {
    * @return {Promise<PermissionResponse>} Promise with PermissionResponse object
    */
   @Get(':id')
+  @ApiParam({
+    name: 'id',
+    required: true,
+    type: 'number',
+  })
   @ApiResponse({
     status: 201,
     description: 'Successful response',

@@ -58,7 +58,7 @@ export class CacheService {
    * @returns {string} The generated hash.
    * @private
    */
-  private generateHash(key: object): string {
+  generateHash(key: object): string {
     const keyString = JSON.stringify(key);
     return crypto.createHash('sha256').update(keyString).digest('hex');
   }

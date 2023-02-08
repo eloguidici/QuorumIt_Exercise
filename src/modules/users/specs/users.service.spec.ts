@@ -53,6 +53,10 @@ describe('UsersService', () => {
         .spyOn(cryptoService, 'encrypt')
         .mockResolvedValueOnce('encrypted_secret');
 
+      jest
+        .spyOn(usersService, 'validateEmail')
+        .mockResolvedValueOnce(undefined);
+
       const result = await usersService.create(userDto);
 
       expect(result).toEqual(user);
@@ -83,6 +87,10 @@ describe('UsersService', () => {
       };
 
       jest.spyOn(usersRepository, 'update').mockResolvedValueOnce(user);
+
+      jest
+        .spyOn(usersService, 'validateEmail')
+        .mockResolvedValueOnce(undefined);
 
       const result = await usersService.update(userDto);
 

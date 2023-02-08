@@ -28,6 +28,7 @@ export class UsersService {
    */
   async create(userDto: CreateUserDto): Promise<User> {
     try {
+      await this.validateEmail(userDto);
       const user = await this.buildUser(userDto);
       return await this.usersRepository.create(user);
     } catch (error) {
@@ -43,6 +44,7 @@ export class UsersService {
    */
   async update(userDto: UpdateUserDto): Promise<User> {
     try {
+      await this.validateEmail(userDto);
       const user = await this.buildUser(userDto);
       return await this.usersRepository.update(user);
     } catch (error) {
@@ -122,10 +124,14 @@ export class UsersService {
    * @param password string
    * @returns Promise<User>
    */
-  async validate(email: string, password: string): Promise<User> {
+  async validateEmailAndPassword(
+    email: string,
+    password: string,
+  ): Promise<User> {
     {
       try {
         const user = await this.usersRepository.findByEmail(email);
+        if (!user) throw new Error(`User ${email} not found`);
         const isValid = await this.passwordService.compare(
           password,
           user.password,
@@ -135,6 +141,26 @@ export class UsersService {
         this.logger.error(error.message);
         throw new Error(`Error validating email and password`);
       }
+    }
+  }
+
+  /**
+   * Validate user's email
+   * @param userDto - The user data transfer object
+   * @returns Promise<void>
+   */
+  async validateEmail(userDto: CreateUserDto | UpdateUserDto): Promise<void> {
+    try {
+      const user = await this.usersRepository.findByEmail(userDto.email);
+      if (!user) return;
+      if ('id' in userDto) {
+        if (user.id == userDto.id) return;
+        throw new Error(`Error validating email, it already exists`);
+      }
+      throw new Error(`Error validating email, it already exists`);
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new Error(`Error validating email`);
     }
   }
 }

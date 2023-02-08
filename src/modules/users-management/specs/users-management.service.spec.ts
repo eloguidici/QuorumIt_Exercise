@@ -54,6 +54,20 @@ describe('UsersManagementService', () => {
 
       expect(result).toEqual(userRole);
     });
+
+    it('should return an error if the assign operation fails', async () => {
+      const assignRoleToUserDto = new AssignRoleToUserDto();
+      assignRoleToUserDto.roleId = 1;
+      assignRoleToUserDto.userId = 1;
+      jest
+        .spyOn(usersManagementRepository, 'assignRoleToUser')
+        .mockImplementation(() => Promise.reject(new Error('error')));
+      await expect(
+        usersManagementService.assignRoleToUser(assignRoleToUserDto),
+      ).rejects.toThrowError(
+        `Failed to assign role ${assignRoleToUserDto.roleId} to user ${assignRoleToUserDto.userId}: error`,
+      );
+    });
   });
 
   describe('unassign role', () => {
@@ -71,6 +85,20 @@ describe('UsersManagementService', () => {
       );
 
       expect(result).toBeUndefined();
+    });
+
+    it('should return an error if the unassign operation fails', async () => {
+      const unassignRoleToUserDto = new UnassignRoleToUserDto();
+      unassignRoleToUserDto.roleId = 1;
+      unassignRoleToUserDto.userId = 1;
+      jest
+        .spyOn(usersManagementRepository, 'unassignRoleFromUser')
+        .mockImplementation(() => Promise.reject(new Error('error')));
+      await expect(
+        usersManagementService.unassignRoleFromUser(unassignRoleToUserDto),
+      ).rejects.toThrowError(
+        `Failed to unassign role ${unassignRoleToUserDto.roleId} to user ${unassignRoleToUserDto.userId}: error`,
+      );
     });
   });
 
@@ -94,6 +122,22 @@ describe('UsersManagementService', () => {
       );
 
       expect(result).toEqual(userPermission);
+    });
+
+    it('should return an error if the unassign operation fails', async () => {
+      const assignPermissionToUserDto = new AssignPermissionToUserDto();
+      assignPermissionToUserDto.permissionId = 1;
+      assignPermissionToUserDto.userId = 1;
+      jest
+        .spyOn(usersManagementRepository, 'assignPermissionToUser')
+        .mockImplementation(() => Promise.reject(new Error('error')));
+      await expect(
+        usersManagementService.assignPermissionToUser(
+          assignPermissionToUserDto,
+        ),
+      ).rejects.toThrowError(
+        `Failed to assign permission ${assignPermissionToUserDto.permissionId} to user ${assignPermissionToUserDto.userId}: error`,
+      );
     });
   });
 

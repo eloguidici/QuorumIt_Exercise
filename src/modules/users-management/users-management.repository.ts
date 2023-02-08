@@ -31,6 +31,13 @@ export class UsersManagementRepository {
    */
   async assignRoleToUser(data: UserRole): Promise<UserRole> {
     try {
+      const userRoleExists = await this.prisma.userRole.findFirst({
+        where: { userId: data.userId, roleId: data.roleId },
+      });
+      if (userRoleExists) {
+        return plainToInstance(UserRole, userRoleExists);
+      }
+
       const userRole = await this.prisma.userRole.create({
         data: {
           userId: data.userId,
@@ -113,6 +120,12 @@ export class UsersManagementRepository {
    */
   async assignPermissionToUser(data: UserPermission): Promise<UserPermission> {
     try {
+      const userPermissionExists = await this.prisma.userPermission.findFirst({
+        where: { userId: data.userId, permissionId: data.permissionId },
+      });
+      if (userPermissionExists) {
+        return plainToInstance(UserPermission, userPermissionExists);
+      }
       const userPermission = await this.prisma.userPermission.create({
         data: {
           userId: data.userId,

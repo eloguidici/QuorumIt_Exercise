@@ -133,10 +133,7 @@ export class UsersRepository {
       return plainToInstance(User, user);
     } catch (error) {
       this.logger.error(error.message);
-      if (error.code === DatabaseErrorEnum.NOT_FOUND) {
-        throw new Error(`User ${email} not found`);
-      }
-      throw error;
+      return null;
     }
   }
 }

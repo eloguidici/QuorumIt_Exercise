@@ -19,8 +19,8 @@ async function generateAdmin(prisma: PrismaClient): Promise<void> {
   const user = await prisma.user.create({
     data: {
       name: 'QuorumIt',
-      email: 'info@quorumit.com',
-      password: '$2b$10$S.Ew4VKH1YwvWtyRlybwUu4siSvz9Cjoe.L68b0qs8jNCKo9v4K3.', // it's hashed password
+      email: 'admin@quorumit.com',
+      password: '$2b$10$bQjwbDpKOHau746cjLgyTOw8YAbAVhaGSuwUQctHI9AXajZQ8Z5Va', // it's Abc$12345$ hashed password
     },
   });
 

@@ -40,6 +40,17 @@ describe('RolesService', () => {
       const result = await rolesService.create(roleDto);
       expect(result).toEqual(role);
     });
+
+    it('should return an error if the create operation fails', async () => {
+      const roleDto = new CreateRoleDto();
+      roleDto.name = 'Sales';
+      jest
+        .spyOn(rolesRepository, 'create')
+        .mockImplementation(() => Promise.reject(new Error('error')));
+      await expect(rolesService.create(roleDto)).rejects.toThrowError(
+        `Failed to create role: error`,
+      );
+    });
   });
 
   describe('update', () => {
@@ -58,6 +69,19 @@ describe('RolesService', () => {
       jest.spyOn(rolesRepository, 'update').mockResolvedValueOnce(role);
       const result = await rolesService.update(roleDto);
       expect(result).toEqual(role);
+    });
+
+    it('should return an error if the update operation fails', async () => {
+      const roleDto = new UpdateRoleDto();
+      roleDto.id = 1;
+      roleDto.name = 'Sales';
+
+      jest
+        .spyOn(rolesRepository, 'update')
+        .mockImplementation(() => Promise.reject(new Error('error')));
+      await expect(rolesService.update(roleDto)).rejects.toThrowError(
+        `Failed to update role: error`,
+      );
     });
   });
 

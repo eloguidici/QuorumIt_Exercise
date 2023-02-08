@@ -22,7 +22,7 @@ export class LoginService {
 
   async login(userDto: LoginDto): Promise<LoginResponse> {
     try {
-      const user = await this.usersService.validate(
+      const user = await this.usersService.validateEmailAndPassword(
         userDto.email,
         userDto.password,
       );
