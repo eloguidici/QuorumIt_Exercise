@@ -27,8 +27,8 @@ It must allow admin users to manage client user’s access to resources.
 ### User stories
 
 
-| USE CASE      | DESCRIPTION   |
-| --- | --- |
+| ID    | DESCRIPTION   |
+| ---   |  --- |
 | US01  | As an admin user, I want to be able to add, edit, update and delete client users so that I can manage which clients have access to the web platform. |
 | US02  | As an admin user, I want to be able to assign roles and/or permissions to client users so that I can control that only authorized client users can access the appropriate resources. |
 | US03  | As an admin user, I want to be able to add, edit, update and delete permissions so that I can manage access to platform resources. |
@@ -99,25 +99,68 @@ $ npm run test:cov
 
 ## Manual Testing of the Application: Step-by-Step Guide
 
+<BR/>
 
-# Paso 0
+# Step 0 - Explanation
 
-Por defecto se generan los siguientes datos cuando 
+```text
+By default the following data is generated:
+A user with the email admin@quorumit.com and the password is Abc$12345$
+An administrator role that is associated with the user
+Two permissions that are assigned to the administrator role
+The user was not assigned direct permissions
 
-# Paso 1
-Abrir una pagina de swagger con la direccion https://localhost:3000/api
-
-# Paso 2
-En la seccion de 'Login' ingresar los siguientes datos:
-
-```json
-{
-  "email": "admin@quorumit.com",
-  "password": "Abc$12345$"
-}
+The step-by-step description is based on the ordering that I thought appropriate to be able to do the manual tests.
 ```
 
-Este endpoint le va a devolver un response con el token necesario para ejecutar los demas endpoints.
+```json
+  {
+    "id": 1,
+    "name": "QuorumIt",
+    "email": "admin@quorumit.com",
+    "roles": [
+      {
+        "id": 1,
+        "name": "Admin",
+        "permissions": [
+          {
+            "id": 1,
+            "name": "Manage Roles"
+          },
+          {
+            "id": 2,
+            "name": "Manage Permissions"
+          }
+        ]
+      }
+    ],
+    "permissions": []
+  }
+```
+
+# Step 1 - Open swagger API
+Open a Swagger page with the address https://localhost:3000/api
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
+
+# Step 2 - Login
+In the 'Login' section, enter the following data:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/login' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "email": "admin@quorumit.com",
+  "password": "Abc$12345$"
+}'
+```
+
+This endpoint will return a response with the token necessary to execute the other endpoints.
 
 ```json
 {
@@ -126,32 +169,40 @@ Este endpoint le va a devolver un response con el token necesario para ejecutar 
 }
 ```
 <div style="background-color:red; padding:10px;">
-  Este token tiene que ser agregado al 'Authorize' en swagger.
+  This token has to be added to the 'Authorize' in Swagger.
 </div>
+</BR>
+</BR>
+</BR>
+</BR>
 
 
 
+# Step 3 - Steps to manual US01
 
-# Paso 3 - Pruebas
+## Create user
 
-## Creacion y consulta de un usuario
+In the Users section, the method with the verb POST is what will allow us to create a user.
 
-En la seccion Users, el metodo con el verbo POST es el que nos va a permitir crear un usuario.
-
-Ejemplo:
+Example:
 
 ```json
-{
+curl -X 'POST' \
+  'http://localhost:3000/users' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
   "name": "Emiliano Loguidici",
   "email": "emilianologuidici@gmail.com",
   "password": "Abc$12345$"
-}
+}'
 ```
 
 
-Esto nos va a generar una respuesta de este tipo
 
 ```json
+//Response
 {
   "id": 65,
   "name": "Emiliano Loguidici",
@@ -161,11 +212,17 @@ Esto nos va a generar una respuesta de este tipo
 }
 ```
 
-Consultamos el usuario por el id
 
-Verbo GET by id
+Check the created user
 
 ```json
+curl -X 'GET' \
+  'http://localhost:3000/users/65' \
+  -H 'accept: */*'
+```
+
+```json
+//Response
 {
   "id": 65,
   "name": "Emiliano Loguidici",
@@ -175,21 +232,171 @@ Verbo GET by id
 }
 
 ```
+<BR/>
+<BR/>
+<BR/>
+<BR/>
 
 
-## Creacion y consulta de un rol
-
-En la seccion Roles, el metodo con el verbo POST es el que nos va a permitir crear un rol.
-
-Ejemplo:
+## Update user
+In the Users section, the method with the verb PUT is what will allow us to update a user.
 
 ```json
 {
+  "id": 65,
+  "name": "Emiliano Martin Loguidici", // add a middle name
+  "email": "emilianologuidici@gmail.com"
+}
+```
+
+```json
+//Response
+{
+  "id": 65,
+  "name": "Emiliano Martin Loguidici",
+  "email": "emilianologuidici@gmail.com",
+  "roles": [],
+  "permissions": []
+}
+```
+
+Check the updated user
+
+```json
+curl -X 'GET' \
+  'http://localhost:3000/users/65' \
+  -H 'accept: */*'
+```
+
+```json
+//Response
+{
+  "id": 65,
+  "name": "Emiliano Loguidici",
+  "email": "emilianologuidici@gmail.com",
+  "roles": [],
+  "permissions": []
+}
+```
+
+## Select all users
+
+```json
+curl -X 'GET' \
+  'http://localhost:3000/users' \
+  -H 'accept: */*'
+```
+
+```json
+//Response
+[
+  {
+    "id": 1,
+    "name": "QuorumIt",
+    "email": "admin@quorumit.com",
+    "roles": [
+      {
+        "id": 1,
+        "name": "Admin",
+        "permissions": [
+          {
+            "id": 1,
+            "name": "Manage Roles"
+          },
+          {
+            "id": 2,
+            "name": "Manage Permissions"
+          }
+        ]
+      }
+    ],
+    "permissions": []
+  },
+  {
+    "id": 2,
+    "name": "Emiliano Loguidici",
+    "email": "emilianologuidici@gmail.com",
+    "roles": [
+      {
+        "id": 1,
+        "name": "Admin",
+        "permissions": [
+          {
+            "id": 1,
+            "name": "Manage Roles"
+          },
+          {
+            "id": 2,
+            "name": "Manage Permissions"
+          }
+        ]
+      }
+    ],
+    "permissions": [
+      {
+        "id": 1,
+        "name": "Manage Roles"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Emiliano Loguidici",
+    "email": "emilianologuidici@hotmail.com",
+    "roles": [],
+    "permissions": []
+  }
+]
+```
+
+## Delete user
+
+```json
+curl -X 'DELETE' \
+  'http://localhost:3000/users/2' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y'
+```
+
+```json
+//Response
+status 200
+```
+
+# Step 4 - Steps to manual test US04
+
+## Create role
+
+In the Roles section, the method with the verb POST is what will allow us to create a role.
+
+Example:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/roles' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
   "name": "Customers"
+}'
+```
+
+```json
+/Response
+{
+  "id": 2,
+  "name": "Customers",
+  "permissions": []
 }
 ```
 
-Esto nos va a generar una respuesta de este tipo
+Check the created role
+```json
+curl -X 'GET' \
+  'http://localhost:3000/roles/2' \
+  -H 'accept: */*'
+```
 
 ```json
 {
@@ -199,61 +406,388 @@ Esto nos va a generar una respuesta de este tipo
 }
 ```
 
-Consultamos el rol por el id
+<BR/>
+<BR/>
+<BR/>
+<BR/>
 
-Verbo GET by id
+
+## Update role
+
+In the Roles section, the method with the verb PUT is what will allow us to update a role.
 
 ```json
 {
   "id": 2,
-  "name": "Customers",
+  "name": "Customers*",// update role name
+}
+```
+
+```json
+//Response
+{
+  "id": 2,
+  "name": "Customers*",
   "permissions": []
 }
 ```
 
+<BR/>
+<BR/>
+<BR/>
+<BR/>
 
-
-
-
-
-
-## Creacion y consulta de un permiso
-
-En la seccion Permisos, el metodo con el verbo POST es el que nos va a permitir crear un rol.
-
-Ejemplo:
+## Select all roles
 
 ```json
+curl -X 'GET' \
+  'http://localhost:3000/roles' \
+  -H 'accept: */*'
+```
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Admin",
+    "permissions": [
+      {
+        "id": 1,
+        "name": "Manage Roles"
+      },
+      {
+        "id": 2,
+        "name": "Manage Permissions"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Customers*",
+    "permissions": []
+  },
+]
+
+```
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
+
+
+## Delete role
+
+```json
+curl -X 'DELETE' \
+  'http://localhost:3000/roles/2' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y'
+```
+
+```json
+//Response
+status 200
+```
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
+
+
+
+
+# Step 5: Steps to manual test US03
+
+## Create permission
+
+In the Permissions section, the method with the verb POST is what will allow us to create a permission.
+
+Example:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/permissions' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "name": "Add Orders"
+}'
+```
+
+```json
+/Response
 {
-  "name": "Add Order"
+  "id": 10,
+  "name": "Add Orders",
+  "permissions": []
 }
 ```
 
-Esto nos va a generar una respuesta de este tipo
+Check the created permission
+```json
+curl -X 'GET' \
+  'http://localhost:3000/permissions/10' \
+  -H 'accept: */*'
+```
 
 ```json
 {
-  "id": 3,
-  "name": "Add Order"
+  "id": 10,
+  "name": "Add Orders",
 }
 ```
 
-Consultamos el permiso por el id
+<BR/>
+<BR/>
+<BR/>
+<BR/>
 
-Verbo GET by id
+
+## Update permission
+
+In the Permissions section, the method with the verb PUT is what will allow us to update a permission.
 
 ```json
 {
-  "id": 3,
-  "name": "Add Order"
+  "id": 10,
+  "name": "Add Orders*",// update permission name
 }
 ```
 
+```json
+//Response
+{
+  "id": 10,
+  "name": "Add Orders*",// update permission name
+}
+```
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
+
+## Select all permissions
+
+```json
+curl -X 'GET' \
+  'http://localhost:3000/permissions' \
+  -H 'accept: */*'
+```
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Manage Roles"
+  },
+  {
+    "id": 2,
+    "name": "Manage Permissions"
+  },
+  {
+  "id": 10,
+  "name": "Add Orders*",
+}
+]
+```
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
 
 
+## Delete permission
+
+```json
+curl -X 'DELETE' \
+  'http://localhost:3000/permissions/10' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y'
+```
+
+```json
+//Response
+status 200
+```
 
 
+<BR/>
+<BR/>
+<BR/>
+<BR/>
 
+
+## Assign permission to role
+
+In the Roles section, the method with the verb POST 'assignPermission' is what will allow us to assign a permission to role.
+
+Example:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/roles/assignPermission' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "roleId": 2,
+  "permissionId": 3
+}'
+```
+
+```json
+//Response
+{
+  "roleId": 2,
+  "permissionId": 10
+}
+```
+
+## Unassign permission to role
+
+In the Roles section, the method with the verb POST 'unassignPermission' is what will allow us to unassign a permission to role.
+
+Example:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/roles/unassignPermission' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "roleId": 2,
+  "permissionId": 3
+}'
+```
+
+```json
+//Response
+status 200
+```
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
+
+
+# Step 5 - Steps to manual US02
+
+
+## Assign role to user
+
+In the Users Management section, the method with the verb POST 'assignRole' is what will allow us to assign a role to user.
+
+Example:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/usersManagement/assignRole' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": 65,
+  "roleId": 10
+}'
+```
+
+```json
+//Response
+{
+  "userId": 65,
+  "roleId": 2
+}
+```
+
+## Unassign role to user
+
+In the Users Management section, the method with the verb POST 'unassignRole' is what will allow us to unassign a role to user.
+
+Example:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/usersManagement/unassignRole' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": 65,
+  "roleId": 2
+}'
+```
+
+```json
+//Response
+status 201
+```
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
+
+
+## Assign permission to user
+
+In the Users Management section, the method with the verb POST 'assignPermission' is what will allow us to assign a permission to user.
+
+Example:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/usersManagement/assignPermission' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": 65,
+  "permissionId": 10
+}'
+```
+
+```json
+//Response
+{
+  "userId": 65,
+  "permissionId": 10
+}
+```
+
+## Unassign permission to user
+
+In the Users Management section, the method with the verb POST 'unassignPermission' is what will allow us to unassign a permission to user.
+
+Example:
+
+```json
+curl -X 'POST' \
+  'http://localhost:3000/usersManagement/unassignPermission' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJSb2xlcyI6W3siaWQiOjEsInVzZXJJZCI6MSwicm9sZUlkIjoxLCJjcmVhdGVkQXQiOiIyMDIzLTAyLTA4VDIzOjA4OjE0LjQ0NloifV0sImlhdCI6MTY3NTk0NzQwOSwiZXhwIjoxNjc2MDMzODA5fQ.Q3XeqfdgYMJaIWyP2bmMfkdi3px0FiiLNSu4BOUnQ_Y' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "userId": 65,
+  "permissionId": 10
+}'
+```
+
+```json
+//Response
+status 201
+```
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
 
 
 

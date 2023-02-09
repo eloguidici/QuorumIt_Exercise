@@ -8,8 +8,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClient } from '@prisma/client';
-import { RolesManagementModule } from 'src/modules/roles-management/roles-management.module';
-import { UsersModule } from 'src/modules/users/users.module';
 import { AdministratorGuard } from '../../auth/guards/administrator-guard';
 import { CryptoService } from '../../commons/crypto.service';
 import { LoggerService } from '../../commons/logger-service';
@@ -33,7 +31,7 @@ describe('UsersManagementController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [RolesManagementModule, UsersModule],
+      imports: [],
       controllers: [UsersManagementController],
       providers: [
         UsersManagementService,

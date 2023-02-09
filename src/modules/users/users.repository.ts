@@ -72,7 +72,9 @@ export class UsersRepository {
    */
   async delete(id: number): Promise<void> {
     try {
-      await this.prisma.user.delete({ where: { id } });
+      await this.prisma.userPermission.deleteMany({ where: { userId: id } });
+      await this.prisma.userRole.deleteMany({ where: { userId: id } });
+      await this.prisma.user.delete({ where: { id: id } });
     } catch (error) {
       this.logger.error(error.message);
       if (error.code === DatabaseErrorEnum.NOT_FOUND) {

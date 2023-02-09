@@ -69,11 +69,16 @@ export class PermissionsRepository {
    */
   async delete(id: number): Promise<void> {
     try {
-      await this.prisma.permission.delete({ where: { id } });
+      await this.prisma.permission.delete({ where: { id: id } });
     } catch (error) {
       this.logger.error(error.message);
       if (error.code === DatabaseErrorEnum.NOT_FOUND) {
         throw new Error(`Permission with ID ${id} was not found`);
+      }
+      if (error.code === DatabaseErrorEnum.FOREIGN_KEY_CONSTRAINT_FAILED) {
+        throw new Error(
+          `The permission with ID ${id} cannot be removed as it is assigned to one or multiple roles or users.`,
+        );
       }
       throw error;
     }

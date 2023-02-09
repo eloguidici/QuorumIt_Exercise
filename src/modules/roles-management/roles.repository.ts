@@ -70,11 +70,17 @@ export class RolesRepository {
    */
   async delete(id: number): Promise<void> {
     try {
-      await this.prisma.role.delete({ where: { id } });
+      await this.prisma.rolePermission.deleteMany({ where: { roleId: id } });
+      await this.prisma.role.delete({ where: { id: id } });
     } catch (error) {
       this.logger.error(error.message);
       if (error.code === DatabaseErrorEnum.NOT_FOUND) {
         throw new Error(`Role with ID ${id} was not found`);
+      }
+      if (error.code === DatabaseErrorEnum.FOREIGN_KEY_CONSTRAINT_FAILED) {
+        throw new Error(
+          `Role with ID ${id} cannot be removed because it is assigned to a User`,
+        );
       }
       throw error;
     }
@@ -105,7 +111,7 @@ export class RolesRepository {
     try {
       const role = await this.prisma.role.findFirstOrThrow({
         where: { id: id },
-        include: { rolePermissions: true },
+        include: { rolePermissions: { include: { permission: true } } },
       });
       return plainToInstance(Role, role);
     } catch (error) {
