@@ -50,12 +50,12 @@ export class UsersController {
    * @return {Promise<UserResponse>} UserResponse Promise
    */
   @Post()
-  @HttpCode(201)
+  @HttpCode(200)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
   @ApiBearerAuth('access-token')
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Successful response',
     type: UserResponse,
   })
@@ -88,7 +88,7 @@ export class UsersController {
   @UseGuards(AdministratorGuard)
   @ApiBearerAuth('access-token')
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Successful response',
     type: UserResponse,
   })

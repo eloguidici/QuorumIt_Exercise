@@ -56,12 +56,12 @@ export class RolesController {
    * @return {Promise<void>} Void Promise
    */
   @Post()
-  @HttpCode(201)
+  @HttpCode(200)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
   @ApiBearerAuth('access-token')
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Successful response',
   })
   @ApiResponse({
@@ -219,13 +219,13 @@ export class RolesController {
    * @throws HttpException in case of an internal server error
    */
   @Post('assignPermission')
-  @HttpCode(201)
+  @HttpCode(200)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
   @UseGuards(ForbiddenAssignRoleIdGuard)
   @ApiBearerAuth('access-token')
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Successful response',
   })
   @ApiResponse({
@@ -257,13 +257,13 @@ export class RolesController {
    * @throws HttpException in case of an internal server error
    */
   @Post('unassignPermission')
-  @HttpCode(201)
+  @HttpCode(200)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
   @UseGuards(ForbiddenUnssignRoleIdGuard)
   @ApiBearerAuth('access-token')
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Successful response',
   })
   @ApiResponse({

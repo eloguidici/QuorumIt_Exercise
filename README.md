@@ -726,7 +726,7 @@ curl -X 'POST' \
 
 ```json
 //Response
-status 201
+status 200
 ```
 
 <BR/>
@@ -781,7 +781,7 @@ curl -X 'POST' \
 
 ```json
 //Response
-status 201
+status 200
 ```
 
 <BR/>

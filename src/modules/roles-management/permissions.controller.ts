@@ -50,12 +50,12 @@ export class PermissionsController {
    * @return {Promise<PermissionResponse>} PermissionResponse Promise
    */
   @Post()
-  @HttpCode(201)
+  @HttpCode(200)
   @UsePipes(ValidationPipe)
   @UseGuards(AdministratorGuard)
   @ApiBearerAuth('access-token')
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Successful response',
   })
   @ApiResponse({
@@ -189,7 +189,7 @@ export class PermissionsController {
     type: 'number',
   })
   @ApiResponse({
-    status: 201,
+    status: 200,
     description: 'Successful response',
   })
   @ApiResponse({
