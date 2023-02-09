@@ -1,0 +1,10 @@
+
+Abrir una paginade swagger con la direccion https://localhost:3000/api
+
+En la seccion de 'Login' ingresar los siguientes datos:
+
+```json
+{
+  "email": "admin@quorumit.com",
+  "password": "Abc$12345$"
+}

@@ -46,6 +46,7 @@ describe('UsersService', () => {
         created_at: undefined,
         updated_at: undefined,
         userRoles: [],
+        userPermissions: [],
       };
 
       jest.spyOn(usersRepository, 'create').mockResolvedValueOnce(user);
@@ -66,6 +67,7 @@ describe('UsersService', () => {
         email: userDto.email,
         password: 'encrypted_secret',
         userRoles: [],
+        userPermissions: [],
       });
     });
   });
@@ -84,6 +86,7 @@ describe('UsersService', () => {
         created_at: undefined,
         updated_at: undefined,
         userRoles: [],
+        userPermissions: [],
       };
 
       jest.spyOn(usersRepository, 'update').mockResolvedValueOnce(user);

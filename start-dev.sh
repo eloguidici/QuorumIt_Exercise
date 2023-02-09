@@ -22,19 +22,12 @@ fi
 # Descargar la imagen de PostgreSQL
 docker pull postgres
 
-# Create a network for the containers
-docker network create authorization-network
-
 # Crear y ejecutar un contenedor de PostgreSQL
 # Run the Postgres container
 docker run --name postgres \
   -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
   -e POSTGRES_DB=$POSTGRES_DB -p 5432:5432 \
   -d postgres
-
-#
-echo "postgresql://postgres:${POSTGRES_PASSWORD}@$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres):5432/postgres"
-
 
 # Verificar si el contenedor está ejecutándose
 docker ps

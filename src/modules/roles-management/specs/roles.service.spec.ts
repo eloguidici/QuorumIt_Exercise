@@ -34,6 +34,7 @@ describe('RolesService', () => {
         name: 'Sales',
         created_at: undefined,
         updated_at: undefined,
+        rolePermissions: [],
       };
 
       jest.spyOn(rolesRepository, 'create').mockResolvedValueOnce(role);
@@ -64,6 +65,7 @@ describe('RolesService', () => {
         name: 'Sales',
         created_at: undefined,
         updated_at: undefined,
+        rolePermissions: [],
       };
 
       jest.spyOn(rolesRepository, 'update').mockResolvedValueOnce(role);

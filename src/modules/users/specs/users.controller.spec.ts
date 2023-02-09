@@ -58,6 +58,7 @@ describe('UsersController', () => {
         created_at: new Date(),
         updated_at: undefined,
         userRoles: [],
+        userPermissions: [],
       };
       jest
         .spyOn(usersService, 'create')
@@ -102,6 +103,7 @@ describe('UsersController', () => {
         created_at: undefined,
         updated_at: undefined,
         userRoles: [],
+        userPermissions: [],
       };
       jest
         .spyOn(usersService, 'update')

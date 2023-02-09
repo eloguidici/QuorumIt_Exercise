@@ -5,15 +5,17 @@
  */
 
 // Import necessary modules
-import { LoggerService } from '../../commons/logger-service';
 import { PrismaClient } from '@prisma/client';
-import { AssignRoleToUserDto } from '../dtos/assign-role-to-user.dto';
-import { UsersManagementService } from '../users-management.service';
-import { UsersManagementRepository } from '../users-management.repository';
-import { UserRole } from '../entites/user-role.entity';
-import { UnassignRoleToUserDto } from '../dtos/unassign-role-to-user.dto';
+import { Role } from '../../roles-management/entities/role.entity';
+import { LoggerService } from '../../commons/logger-service';
 import { AssignPermissionToUserDto } from '../dtos/assign-permission-to-user.dto';
+import { AssignRoleToUserDto } from '../dtos/assign-role-to-user.dto';
 import { UnassignPermissionToUserDto } from '../dtos/unassign-permission-to-user.dto';
+import { UnassignRoleToUserDto } from '../dtos/unassign-role-to-user.dto';
+import { UserRole } from '../entites/user-role.entity';
+import { UsersManagementRepository } from '../users-management.repository';
+import { UsersManagementService } from '../users-management.service';
+import { Permission } from '../../roles-management/entities/permission.entity';
 import { UserPermission } from '../entites/user-permission.entity';
 
 describe('UsersManagementService', () => {
@@ -42,6 +44,7 @@ describe('UsersManagementService', () => {
       const userRole: UserRole = {
         roleId: 1,
         userId: 1,
+        role: new Role(),
       };
 
       jest
@@ -111,6 +114,7 @@ describe('UsersManagementService', () => {
       const userPermission: UserPermission = {
         permissionId: 1,
         userId: 1,
+        permission: new Permission(),
       };
 
       jest
