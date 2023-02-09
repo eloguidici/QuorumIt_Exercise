@@ -87,7 +87,7 @@ export class RolesRepository {
   async findAll(): Promise<Role[]> {
     try {
       const roles = await this.prisma.role.findMany({
-        include: { rolesPermissions: true },
+        include: { rolePermissions: { include: { permission: true } } },
       });
       return roles.map((role) => plainToInstance(Role, role));
     } catch (error) {
@@ -105,7 +105,7 @@ export class RolesRepository {
     try {
       const role = await this.prisma.role.findFirstOrThrow({
         where: { id: id },
-        include: { rolesPermissions: true },
+        include: { rolePermissions: true },
       });
       return plainToInstance(Role, role);
     } catch (error) {

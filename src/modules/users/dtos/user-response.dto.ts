@@ -1,3 +1,7 @@
+import { PermissionResponse } from 'src/modules/roles-management/dtos/permission-response.dto';
+import { RoleResponse } from 'src/modules/roles-management/dtos/role-response.dto';
+import { Permission } from 'src/modules/roles-management/entities/permission.entity';
+import { Role } from 'src/modules/roles-management/entities/role.entity';
 import { User } from '../entities/user.entity';
 
 export class UserResponse {
@@ -7,7 +11,12 @@ export class UserResponse {
     this.email = entity.email;
     this.created_at = entity.created_at;
     this.updated_at = entity.updated_at;
-    this.roles = entity.userRoles.map((role) => role.roleId);
+    this.roles = entity.userRoles.map(
+      (userRole) => new RoleResponse(userRole.role),
+    );
+    this.permissions = entity.userPermissions.map(
+      (permission) => new PermissionResponse(permission.permission),
+    );
   }
 
   id: number;
@@ -20,5 +29,7 @@ export class UserResponse {
 
   updated_at: Date;
 
-  roles: number[];
+  roles: RoleResponse[];
+
+  permissions: PermissionResponse[];
 }

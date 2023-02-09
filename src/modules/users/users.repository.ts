@@ -89,7 +89,16 @@ export class UsersRepository {
   async findAll(): Promise<User[]> {
     try {
       const users = await this.prisma.user.findMany({
-        include: { userRoles: true, userPermissions: true },
+        include: {
+          userRoles: {
+            include: {
+              role: {
+                include: { rolePermissions: { include: { permission: true } } },
+              },
+            },
+          },
+          userPermissions: { include: { permission: true } },
+        },
       });
       return users.map((user) => plainToInstance(User, user));
     } catch (error) {
@@ -107,7 +116,16 @@ export class UsersRepository {
     try {
       const user = await this.prisma.user.findFirstOrThrow({
         where: { id: id },
-        include: { userRoles: true, userPermissions: true },
+        include: {
+          userRoles: {
+            include: {
+              role: {
+                include: { rolePermissions: { include: { permission: true } } },
+              },
+            },
+          },
+          userPermissions: { include: { permission: true } },
+        },
       });
       return plainToInstance(User, user);
     } catch (error) {

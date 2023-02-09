@@ -1,3 +1,5 @@
+import { RolePermission } from './role-permission.entity';
+
 export class Role {
   id: number;
 
@@ -6,4 +8,6 @@ export class Role {
   created_at: Date;
 
   updated_at: Date;
+
+  rolePermissions: RolePermission[] = [];
 }

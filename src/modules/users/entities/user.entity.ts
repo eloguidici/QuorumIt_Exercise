@@ -1,4 +1,5 @@
-import { UserRole } from '@prisma/client';
+import { UserPermission } from 'src/modules/users-management/entites/user-permission.entity';
+import { UserRole } from 'src/modules/users-management/entites/user-role.entity';
 
 export class User {
   id: number;
@@ -14,4 +15,6 @@ export class User {
   updated_at: Date;
 
   userRoles: UserRole[] = [];
+
+  userPermissions: UserPermission[] = [];
 }
