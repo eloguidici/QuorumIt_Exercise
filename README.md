@@ -10,6 +10,7 @@
 * Installation
 * Test
 * Manual Testing of the Application: Step-by-Step Guide
+* Possible Updates
 * Extras
 
 
@@ -794,6 +795,21 @@ status 200
 <BR/>
 <BR/>
 
+
+## POSSIBLE UPDATES
+
+- Password reset (by administrator)
+- Change of password
+- Methods for bulk assigning roles to users
+- Methods for bulk assigning permissions to users
+- Methods for bulk assigning permissions to roles.
+- Using redis or other for cache
+
+
+<BR/>
+<BR/>
+<BR/>
+<BR/>
 
 
 ## EXTRAS
