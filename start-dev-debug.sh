@@ -22,18 +22,12 @@ fi
 # Descargar la imagen de PostgreSQL
 docker pull postgres
 
-# Create a network for the containers
-docker network create authorization-network
-
 # Crear y ejecutar un contenedor de PostgreSQL
 # Run the Postgres container
 docker run --name postgres \
   -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD \
   -e POSTGRES_DB=$POSTGRES_DB -p 5432:5432 \
   -d postgres
-
-#
-echo "postgresql://postgres:${POSTGRES_PASSWORD}@$(docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' postgres):5432/postgres"
 
 
 # Verificar si el contenedor está ejecutándose
@@ -44,16 +38,4 @@ npx prisma generate
 npx prisma migrate dev --name init 
 
 # Generando data por defecto
-npx prisma db seed  
-
-
-
-#docker run -p 5050:80  -e "PGADMIN_DEFAULT_EMAIL=emilianologuidici@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=admin"  -d dpage/pgadmin4
-
-#host: host.docker.internal
-#database: authorization
-#user: postgres
-#password: admin
-
-#docker inspect --format='{{.NetworkSettings.Networks}}' postgres
-#docker inspect --format='{{.NetworkSettings.Networks}}' authorization-app
+npx prisma db seed

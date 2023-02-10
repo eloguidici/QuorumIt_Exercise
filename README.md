@@ -10,7 +10,7 @@
 * Installation
 * Test
 * Manual Testing of the Application: Step-by-Step Guide
-* FAQ
+* Extras
 
 
 ## INTRODUCTION
@@ -41,6 +41,11 @@ It must allow admin users to manage client user’s access to resources.
 ## INSTALLATION
 
 ### Docker
+<BR/>
+<div style="background-color:red; padding:10px;">
+WARNING: Please make sure that ports 5432 and 3000 are available before proceeding with the Docker installation. These ports are required for accessing the PostgreSQL database and Node.js web applications, respectively. If these ports are already in use, you may need to change the Docker configuration to use different ports or free up the necessary ports.
+</div>
+<BR/>
 
 ```bash
 $ ./start.sh
@@ -169,7 +174,7 @@ This endpoint will return a response with the token necessary to execute the oth
 }
 ```
 <div style="background-color:red; padding:10px;">
-  This token has to be added to the 'Authorize' in Swagger.
+  WARNING: This token has to be added to the 'Authorize' in Swagger.
 </div>
 </BR>
 </BR>
