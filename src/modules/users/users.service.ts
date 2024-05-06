@@ -86,7 +86,7 @@ export class UsersService {
    */
   async findFirst(id: number): Promise<User> {
     try {
-      return await this.usersRepository.findFirst(id);
+        return await this.usersRepository.findFirst(id);
     } catch (error) {
       this.logger.error(error.message);
       throw new Error(`Failed to retrieve user: ${error.message}`);

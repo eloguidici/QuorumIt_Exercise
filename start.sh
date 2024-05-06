@@ -4,7 +4,7 @@ clear
 if command -v docker >/dev/null 2>&1; then
   echo "Docker is installed."
 else
-  echo "Docker is not installed."
+  echo "Docker is not installed."$
   echo "\n"
   echo "Exiting..."
 exit 1
